@@ -1,11 +1,11 @@
-CREATE DATABASE punto_de_venta_v_dos_uno;
+CREATE DATABASE punto_de_venta;
 /**
 	Se modifica la tabla ventas, agregando los campos
     tipo_descuento,
     descuento.
 */
 
-USE punto_de_venta_v_dos_uno;
+USE punto_de_venta;
 
 CREATE TABLE clientes
 (
