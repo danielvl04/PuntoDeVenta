@@ -7,11 +7,12 @@ CREATE DATABASE punto_de_venta;
 
 USE punto_de_venta;
 
+
 CREATE TABLE clientes
 (
 id VARCHAR(15) PRIMARY KEY,
 nombre VARCHAR(50) NOT NULL,
-direccion VARCHAR(50),
+direccion VARCHAR(100),
 telefono VARCHAR(10)
 )engine = InnoDB;
 
@@ -485,7 +486,8 @@ where
 ********************************************
 FUNCIONANDO CON BUSCAR TICKET - PROBANDO**
 ********************************************/
-    create view vista_factura as
+   
+   create view vista_factura as
 	select  
 	ventas.id,
     clientes.id as id_cliente,
@@ -500,6 +502,8 @@ FUNCIONANDO CON BUSCAR TICKET - PROBANDO**
 		) as precio_descuento,
 	productos.precio * detalle_ventas.cantidad as precio_sin_descuento,	
 	ventas.estado,
+	clientes.direccion,
+    clientes.telefono,
 	abonos.valor_abono 
 from 
 	ventas, detalle_ventas, productos, abonos, ventas_cliente, clientes
@@ -509,9 +513,10 @@ where
 	and ventas_cliente.id_cliente = clientes.id
 	and ventas_cliente.id_venta  = ventas.id
 	and abonos.id_venta = ventas.id 
-	group by productos.id, clientes.id,ventas.id,detalle_ventas.descuento order by id desc;    
+	group by productos.id, clientes.id,ventas.id,detalle_ventas.descuento order by id desc; 
     
-/***********************************************************/    
+/***********************************************************/   
+
 create view vista_factura_abonos as
 select  
 	abonos.id as id_abono,
@@ -519,6 +524,8 @@ select
     clientes.id as id_cliente,
 	clientes.nombre as nombre_cliente,
 	ventas.estado,
+	clientes.direccion,
+    clientes.telefono,
 	abonos.valor_abono,
 	abonos.fecha 
 from 
@@ -529,7 +536,7 @@ where
 	and ventas_cliente.id_cliente = clientes.id
 	and ventas_cliente.id_venta  = ventas.id
 	and abonos.id_venta = ventas.id 
-	group by abonos.id order by id_venta desc;
+	group by abonos.id order by id_venta desc;  
 /************************************************************
 *************************************************************
 *************************************************************
@@ -644,8 +651,11 @@ where
 	and productos.id_categoria = categorias.id 
 	and abonos.id_venta = ventas.id 
 	group by productos.id, ventas.id,detalle_ventas.descuento,fecha,abonos.valor_abono order by id desc;   
-    
-    
+/***************************************************************************************
+***************************************************************************
+***************************************************************************/
+
+
     
     
 
@@ -676,6 +686,31 @@ where
 	and abonos.id_venta = ventas.id 
 	and categorias.id = productos.id_categoria 
 	group by productos.id, ventas.id,detalle_ventas.descuento,fecha,abonos.valor_abono order by id desc;
+    
+    
+
+/*************************************
+************************************
+************************************/
+create view vista_mostrar_compras as   
+select 
+	compras.id as id_compra,
+	detalle_compras.id_articulo,
+	detalle_compras.cantidad,
+	articulos.nombre,
+	detalle_compras.precio as precio_unidad,
+	detalle_compras.precio * detalle_compras.cantidad as precio_total,
+	compras.num_comprobante,
+	proveedores.razon_social,
+	compras.comprobante, 
+	compras.descripcion as estado,
+	compras.fecha 
+from 
+	compras, detalle_compras, proveedores, articulos
+where 
+	compras.id = detalle_compras.id_compra
+	and detalle_compras.id_articulo = articulos.id
+	and compras.id_proveedor = proveedores.id order by id_compra desc; 	    
     
 
 /***********************************************************************************/
