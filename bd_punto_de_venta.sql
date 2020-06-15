@@ -504,7 +504,8 @@ FUNCIONANDO CON BUSCAR TICKET - PROBANDO**
 	ventas.estado,
 	clientes.direccion,
     clientes.telefono,
-	abonos.valor_abono 
+	abonos.valor_abono,
+    ventas.fecha
 from 
 	ventas, detalle_ventas, productos, abonos, ventas_cliente, clientes
 where 
@@ -586,7 +587,8 @@ select
 	) as precio_descuento,
 	productos.precio *detalle_ventas.cantidad as precio_sin_descuento,	
 	ventas.estado,
-	abonos.valor_abono 
+	abonos.valor_abono,
+    ventas.fecha
 from 
 	ventas, detalle_ventas, productos, abonos
 where 
